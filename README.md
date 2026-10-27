@@ -41,4 +41,4 @@ As palavras-passe são armazenadas com hash e salt. Para produção, defina `NOD
 
 ## Produção
 
-Gere o cliente com `npm run build` dentro de `Client/` e inicie a API com `npm start` dentro de `Server/`. O Express também pode servir o build de `Client/dist/` quando `NODE_ENV=production`; se o cliente for publicado noutro domínio, configure `VITE_API_URL` para a URL da API e `FRONTEND_URL` para a origem publicada do cliente. Publique o site através de HTTPS e utilize palavras-passe fortes em produção.
+Gere o cliente com `npm run build` dentro de `Client/` e inicie a API com `npm start` dentro de `Server/`. Para publicar o cliente na Vercel a partir deste monorepo, defina `Client` como **Root Directory**; `Client/vercel.json` encaminha as rotas da aplicação, como `/admin`, para `index.html`. Configure `VITE_API_URL` na Vercel com a URL da API e `FRONTEND_URL` no servidor com a origem publicada do cliente. O Express também pode servir o build de `Client/dist/` quando `NODE_ENV=production`. Publique o site através de HTTPS e utilize palavras-passe fortes em produção.
