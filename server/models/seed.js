@@ -7,7 +7,7 @@ export async function seedProducts() {
   const [rows] = await database.query("SELECT COUNT(*) AS count FROM products");
   if (Number(rows[0].count) > 0) return;
 
-  const productsFile = path.join(config.projectDirectory, "server", "data", "products.json");
+  const productsFile = path.join(config.projectDirectory, "data", "products.json");
   const products = JSON.parse(await fs.readFile(productsFile, "utf8"));
   const connection = await database.getConnection();
   try {

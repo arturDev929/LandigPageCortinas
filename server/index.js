@@ -6,11 +6,13 @@ import { siteSettingsRoutes } from "./routes/siteSettingsRoutes.js";
 import { database, initializeDatabase } from "./models/database.js";
 import { seedAdmin } from "./models/adminModel.js";
 import { seedProducts } from "./models/seed.js";
+import cors from "cors";
 import path from "node:path";
 
 const app = express();
 
 app.disable("x-powered-by");
+app.use(cors({ origin: config.frontendUrl }));
 app.use(express.json({ limit: "32kb" }));
 app.use("/uploads", express.static(config.uploadsDirectory, {
   fallthrough: false,
@@ -24,8 +26,8 @@ app.use("/api/admin", authRoutes);
 app.use("/api/settings", siteSettingsRoutes);
 
 if (config.production) {
-  app.use(express.static(path.join(config.projectDirectory, "dist")));
-  app.get("*", (_req, res) => res.sendFile(path.join(config.projectDirectory, "dist", "index.html")));
+  app.use(express.static(config.clientBuildDirectory));
+  app.get("*", (_req, res) => res.sendFile(path.join(config.clientBuildDirectory, "index.html")));
 }
 
 app.use((error, req, res, _next) => {

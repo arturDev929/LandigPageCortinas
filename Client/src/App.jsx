@@ -41,6 +41,11 @@ const money = new Intl.NumberFormat("pt-AO", { style: "currency", currency: "AOA
 const productTags = ["", "Promoção", "Novo", "Esgotado"];
 const allCategoriesValue = "__all__";
 const isAdminPath = () => window.location.pathname.replace(/\/+$/, "") === "/admin";
+const apiBaseUrl = import.meta.env.VITE_API_URL?.replace(/\/+$/, "") || "";
+
+function assetUrl(url) {
+  return url?.startsWith("/uploads/") ? `${apiBaseUrl}${url}` : url;
+}
 
 function normalizeProductTag(tag) {
   return tag?.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase();
@@ -75,7 +80,7 @@ function getWhatsAppUrl(number, message) {
 }
 
 async function request(path, options = {}) {
-  const response = await fetch(path, options);
+  const response = await fetch(`${apiBaseUrl}${path}`, options);
   if (response.status === 204) return null;
 
   const data = await response.json().catch(() => ({}));
@@ -130,7 +135,7 @@ function App() {
       icon.rel = "icon";
       document.head.appendChild(icon);
     }
-    icon.href = siteSettings.faviconUrl || "/favicon.svg";
+    icon.href = assetUrl(siteSettings.faviconUrl || "/favicon.svg");
   }, [siteSettings]);
 
   useLayoutEffect(() => {
@@ -225,7 +230,7 @@ function App() {
       {page === "home" && <header className="site-header">
         <a className="brand" href="#inicio" onClick={() => navigateTo("home")} aria-label={`${siteSettings.siteName}, início`}>
           {siteSettings.logoImageUrl
-            ? <img className="brand-logo" src={siteSettings.logoImageUrl} alt="" />
+            ? <img className="brand-logo" src={assetUrl(siteSettings.logoImageUrl)} alt="" />
             : <span className="brand-mark"><span /></span>}
           <span className="brand-name">{siteSettings.siteName}<small>{siteSettings.tagline}</small></span>
         </a>
@@ -264,7 +269,7 @@ function App() {
       ) : (
         <main>
           <section className="hero" id="inicio">
-            <img className="hero-image" src={featuredProduct?.image || products[0]?.image || "https://images.unsplash.com/photo-1578337834535-357ad7dccdfd?auto=format&fit=crop&w=2200&q=90"} alt={featuredProduct?.name || products[0]?.name || "Cortinas para a sua casa"} />
+            <img className="hero-image" src={assetUrl(featuredProduct?.image || products[0]?.image || "https://images.unsplash.com/photo-1578337834535-357ad7dccdfd?auto=format&fit=crop&w=2200&q=90")} alt={featuredProduct?.name || products[0]?.name || "Cortinas para a sua casa"} />
             <div className="hero-overlay" />
             <div className="hero-content">
               <span className="eyebrow hero-eyebrow">{featuredProduct?.tag || siteSettings.heroEyebrow}</span>
@@ -318,7 +323,7 @@ function App() {
               {visibleProducts.map((product) => (
                 <article className={`product-card ${product.tag?.toLowerCase() === "esgotado" ? "product-card-sold-out" : ""}`} key={product.id}>
                   <div className="product-image-wrap">
-                    <img src={product.image} alt={product.name} loading="lazy" />
+                    <img src={assetUrl(product.image)} alt={product.name} loading="lazy" />
                     {product.tag && (normalizeProductTag(product.tag) !== "promocao" || isPromotion(product)) && <span className={`product-tag ${getProductTagClass(product.tag)}`}>{product.tag}</span>}
                     {product.tag?.toLowerCase() === "esgotado" && <span className="sold-out-overlay" aria-hidden="true" />}
                     <button className="quick-view" disabled={product.tag?.toLowerCase() === "esgotado"} onClick={() => document.getElementById("contacto")?.scrollIntoView({ behavior: "smooth" })}>
@@ -349,7 +354,7 @@ function App() {
               <a className="text-link" href="#contacto">Ver contactos <ArrowRight size={15} /></a>
             </div>
             <figure className="atelier-note-photo">
-              <img src={products[1]?.image || products[0]?.image || "https://images.unsplash.com/photo-1757382603619-7682803cfc5d?auto=format&fit=crop&w=1300&q=85"} alt={products[1]?.name || products[0]?.name || "Cortinas disponíveis na loja"} loading="lazy" />
+              <img src={assetUrl(products[1]?.image || products[0]?.image || "https://images.unsplash.com/photo-1757382603619-7682803cfc5d?auto=format&fit=crop&w=1300&q=85")} alt={products[1]?.name || products[0]?.name || "Cortinas disponíveis na loja"} loading="lazy" />
               {products[1]?.name && <figcaption>{products[1].name} · {products[1].category}</figcaption>}
             </figure>
           </section>
@@ -379,7 +384,7 @@ function App() {
       {page === "home" && <footer className="site-footer">
         <a className="brand footer-brand" href="#inicio" onClick={() => navigateTo("home")}>
           {siteSettings.logoImageUrl
-            ? <img className="brand-logo" src={siteSettings.logoImageUrl} alt="" />
+            ? <img className="brand-logo" src={assetUrl(siteSettings.logoImageUrl)} alt="" />
             : <span className="brand-mark"><span /></span>}
           <span className="brand-name">{siteSettings.siteName}<small>{siteSettings.tagline}</small></span>
         </a>
@@ -427,7 +432,7 @@ function SiteImageField({ label, settingKey, form, setForm, uploadImage, busy, s
     <>
       <label>{label} — carregar do computador<input className="image-file-input" type="file" accept="image/jpeg,image/png,image/gif,image/webp" onChange={handleUpload} disabled={busy} /><span className="settings-field-hint">JPG, PNG, GIF ou WebP · máximo 5 MB</span></label>
       <label>{label} — URL<input maxLength="2048" value={value} onChange={(event) => setForm((currentForm) => ({ ...currentForm, [settingKey]: event.target.value }))} placeholder="https://... ou /uploads/..." /></label>
-      {value && <img className="settings-image-preview" src={value} alt={`Pré-visualização: ${label.toLowerCase()}`} />}
+      {value && <img className="settings-image-preview" src={assetUrl(value)} alt={`Pré-visualização: ${label.toLowerCase()}`} />}
     </>
   );
 }
@@ -663,7 +668,7 @@ function AdminPanel({ products, siteSettings, theme, token, notify, onToggleThem
               </div>
               {products.map((product) => (
                 <article className="admin-product-row" key={product.id}>
-                  <img src={product.image} alt="" />
+                  <img src={assetUrl(product.image)} alt="" />
                   <div className="admin-product-info">
                     <strong>{product.name}</strong>
                     <span>
@@ -723,7 +728,7 @@ function AdminPanel({ products, siteSettings, theme, token, notify, onToggleThem
                   )}
                   <label>Carregar imagem do computador<input className="image-file-input" type="file" accept="image/jpeg,image/png,image/gif,image/webp" onChange={uploadProductImage} disabled={busy} /><span className="settings-field-hint">JPG, PNG, GIF ou WebP · máximo 5 MB</span></label>
                   <label>Ou indique o URL da imagem<input type="text" maxLength="2048" value={form.image} onChange={(event) => setForm({ ...form, image: event.target.value })} required placeholder="https://..." /></label>
-                  {form.image && <img className="product-image-preview" src={form.image} alt="Pré-visualização da imagem do produto" />}
+                  {form.image && <img className="product-image-preview" src={assetUrl(form.image)} alt="Pré-visualização da imagem do produto" />}
                   <div className="product-modal-actions">
                     <button className="button button-cancel" type="button" onClick={resetForm} disabled={busy}>Cancelar</button>
                     <button className="button button-dark" type="submit" disabled={busy}>{busy ? "A guardar..." : editingId ? "Guardar alterações" : "Adicionar produto"} {editingId ? <Check size={16} /> : <Plus size={16} />}</button>
@@ -754,7 +759,7 @@ function AdminPanel({ products, siteSettings, theme, token, notify, onToggleThem
                     <SiteImageField label="Logo do site" settingKey="logoImageUrl" form={settingsForm} setForm={setSettingsForm} uploadImage={uploadImage} busy={busy} setBusy={setBusy} notify={notify} />
                     <label>Carregar ícone do computador<input className="image-file-input" type="file" accept="image/jpeg,image/png,image/gif,image/webp" onChange={uploadSiteIcon} disabled={busy} /><span className="settings-field-hint">JPG, PNG, GIF ou WebP · máximo 5 MB</span></label>
                     <label>URL do ícone / favicon<input maxLength="2048" value={settingsForm.faviconUrl} onChange={(event) => setSettingsForm({ ...settingsForm, faviconUrl: event.target.value })} placeholder="/favicon.svg ou https://..." /></label>
-                    {settingsForm.faviconUrl && <img className="settings-icon-preview" src={settingsForm.faviconUrl} alt="Pré-visualização do ícone do site" />}
+                    {settingsForm.faviconUrl && <img className="settings-icon-preview" src={assetUrl(settingsForm.faviconUrl)} alt="Pré-visualização do ícone do site" />}
                     <label>Descrição do site<input maxLength="300" value={settingsForm.metaDescription} onChange={(event) => setSettingsForm({ ...settingsForm, metaDescription: event.target.value })} /></label>
                   </div>
                   <div className="settings-form-section">

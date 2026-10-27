@@ -7,8 +7,10 @@ const serverDirectory = path.dirname(fileURLToPath(import.meta.url));
 export const config = {
   port: Number(process.env.PORT) || 3001,
   production: process.env.NODE_ENV === "production",
+  frontendUrl: process.env.FRONTEND_URL || "http://localhost:5173",
   databaseClient: (process.env.DB_CLIENT || "mysql").toLowerCase(),
-  projectDirectory: path.resolve(serverDirectory, ".."),
+  projectDirectory: serverDirectory,
+  clientBuildDirectory: path.resolve(serverDirectory, "..", "Client", "dist"),
   databaseName: process.env.DB_NAME || "bd_curtinas",
   databaseHost: process.env.DB_HOST || "127.0.0.1",
   databasePort: Number(process.env.DB_PORT) || 3306,
