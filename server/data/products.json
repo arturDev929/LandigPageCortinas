@@ -1,0 +1,62 @@
+[
+  {
+    "id": "lino-manha",
+    "name": "Linho da Manhã",
+    "category": "Linho natural",
+    "description": "Linho lavado que deixa a luz entrar devagar. Leve, intemporal e sempre diferente.",
+    "price": 89,
+    "unit": "por painel",
+    "image": "https://images.unsplash.com/photo-1578337834535-357ad7dccdfd?auto=format&fit=crop&w=1200&q=85",
+    "tag": "Mais escolhido"
+  },
+  {
+    "id": "algodao-sereno",
+    "name": "Algodão Sereno",
+    "category": "Algodão",
+    "description": "Textura suave e caída natural, para criar ambientes tranquilos e cheios de conforto.",
+    "price": 64,
+    "unit": "por painel",
+    "image": "https://images.unsplash.com/photo-1757382603619-7682803cfc5d?auto=format&fit=crop&w=1200&q=85",
+    "tag": ""
+  },
+  {
+    "id": "blackout-noite",
+    "name": "Noite Inteira",
+    "category": "Blackout",
+    "description": "Escuridão e descanso, sem abdicar de um acabamento elegante e contemporâneo.",
+    "price": 112,
+    "unit": "por painel",
+    "image": "https://plus.unsplash.com/premium_photo-1668073437337-5734dc7ef812?auto=format&fit=crop&w=1200&q=85",
+    "tag": "Conforto total"
+  },
+  {
+    "id": "voil-brisa",
+    "name": "Voil Brisa",
+    "category": "Voil",
+    "description": "Um véu delicado que filtra a claridade e veste a janela com leveza.",
+    "price": 48,
+    "unit": "por painel",
+    "image": "https://images.unsplash.com/photo-1578337834535-357ad7dccdfd?auto=format&fit=crop&w=1200&q=85",
+    "tag": ""
+  },
+  {
+    "id": "linho-terracota",
+    "name": "Linho Terra",
+    "category": "Linho natural",
+    "description": "Tons quentes e fibras naturais para espaços que pedem personalidade e calma.",
+    "price": 96,
+    "unit": "por painel",
+    "image": "https://images.unsplash.com/photo-1757382603619-7682803cfc5d?auto=format&fit=crop&w=1200&q=85",
+    "tag": "Novo"
+  },
+  {
+    "id": "algodao-sombra",
+    "name": "Algodão Sombra",
+    "category": "Algodão",
+    "description": "Um tecido encorpado e versátil, pensado para durar e combinar com tudo.",
+    "price": 72,
+    "unit": "por painel",
+    "image": "https://plus.unsplash.com/premium_photo-1668073437337-5734dc7ef812?auto=format&fit=crop&w=1200&q=85",
+    "tag": ""
+  }
+]
